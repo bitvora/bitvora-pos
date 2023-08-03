@@ -7,6 +7,7 @@ import {ROUTES, NODELESS_URL, STORAGE_KEYS} from '../../lib/constants';
 import {ExternalLink} from '../../components/Links';
 import {getData} from '../../lib/storage';
 import styles from './styles';
+import SplashImage from '../../assets/Splash2';
 
 const IndexScreen = () => {
   const {navigate} = useNavigation();
@@ -28,7 +29,9 @@ const IndexScreen = () => {
         start={{x: 0, y: 0}}
         end={{x: 1, y: 1}}
         style={styles.background}>
-        <View style={styles.topContainer} />
+        <View style={styles.topContainer}>
+          <SplashImage />
+        </View>
 
         <View style={styles.bottomContainer}>
           <Text style={styles.headerText}>Nodeless</Text>
