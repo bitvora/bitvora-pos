@@ -14,6 +14,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {PrimaryButton} from '../../components/Buttons';
 import {setData} from '../../lib/storage';
 import styles from './styles';
+import SplashImage from '../../assets/Splash3';
 
 const LoginScreen = () => {
   const [key, setKey] = useState('');
@@ -36,7 +37,9 @@ const LoginScreen = () => {
         behavior="padding"
         keyboardVerticalOffset={120}
         style={styles.container}>
-        <View style={styles.topContainer} />
+        <View style={styles.topContainer}>
+          <SplashImage />
+        </View>
 
         <View style={styles.bottomContainer}>
           <Text style={styles.headerText}>Log in</Text>
