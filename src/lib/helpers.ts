@@ -1,6 +1,7 @@
 import Toast from 'react-native-toast-message';
 import Clipboard from '@react-native-community/clipboard';
 import dayjs from 'dayjs';
+import {TIMEZONES} from './constants';
 
 export function formatCurrency(
   amount: number,
@@ -49,3 +50,7 @@ export const addCommasToNumber = (number: number) => {
 
 export const formatDate = (date: string, format = 'MMM D, YYYY  hh:mm:ss A') =>
   dayjs(date).format(format);
+
+export const findTimezoneByCode = (tzCode: string) => {
+  return TIMEZONES.find(timezone => timezone.tzCode === tzCode);
+};
