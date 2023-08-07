@@ -1,4 +1,5 @@
 import Config from 'react-native-config';
+import timezones from 'timezones-list';
 
 export const ROUTES = {
   HOME: 'HOME',
@@ -17,7 +18,20 @@ export const STORAGE_KEYS = {
   INVOICE_DATA: 'INVOICE_DATA',
   BTC_TO_USD: 'BTC_TO_USD',
   STORES: 'STORES',
+  DEFAULT_TIMEZONE: 'UTC',
+  DEFAULT_CURRENCY: 'USD',
 };
+
+export const CURRENCIES = [
+  {
+    label: 'USD',
+  },
+  {
+    label: 'CAD',
+  },
+];
+
+export const TIMEZONES = timezones;
 
 export const COLORS = {
   MAIN: '#FF5A1F',

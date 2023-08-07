@@ -117,6 +117,17 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
+  statusContent: {
+    marginVertical: 20,
+    justifyContent: 'center',
+    textAlign: 'center',
+  },
+  statusText: {
+    textAlign: 'center',
+    color: '#6B7280',
+    fontSize: 15,
+    fontWeight: '600',
+  },
 });
 
 export default styles;

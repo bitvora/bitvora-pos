@@ -6,9 +6,10 @@ import {createMaterialBottomTabNavigator} from '@react-navigation/material-botto
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FeatherIcons from 'react-native-vector-icons/Feather';
 import AntDesignIcons from 'react-native-vector-icons/AntDesign';
+import {NativeBaseProvider} from 'native-base';
 
 import HomeScreen from './src/screens/home';
-import IndexScreen from './src/screens/index';
+import IndexScreen from './src/screens/index/index';
 import LoginScreen from './src/screens/login';
 import SettingsScreen from './src/screens/settings';
 import TransactionsScreen from './src/screens/transactions';
@@ -103,36 +104,38 @@ function App(): JSX.Element {
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
         <AppContextProvider>
-          <PaperProvider>
-            <NavigationContainer theme={MyTheme}>
-              <Stack.Navigator initialRouteName={ROUTES.INDEX}>
-                <Stack.Screen
-                  name={ROUTES.INDEX}
-                  options={{headerShown: false}}
-                  component={IndexScreen}
-                />
-                <Stack.Screen
-                  name={ROUTES.LOGIN}
-                  options={{headerShown: false}}
-                  component={LoginScreen}
-                />
-                <Stack.Screen
-                  name={ROUTES.APP}
-                  options={{headerShown: false}}
-                  component={MainAppScreen}
-                />
-                <Stack.Screen
-                  name={ROUTES.INVOICE_CHECKOUT}
-                  component={InvoiceCheckoutScreen}
-                  options={{
-                    title: 'Invoice',
-                    headerTintColor: 'black',
-                    headerBackVisible: true,
-                  }}
-                />
-              </Stack.Navigator>
-            </NavigationContainer>
-          </PaperProvider>
+          <NativeBaseProvider>
+            <PaperProvider>
+              <NavigationContainer theme={MyTheme}>
+                <Stack.Navigator initialRouteName={ROUTES.INDEX}>
+                  <Stack.Screen
+                    name={ROUTES.INDEX}
+                    options={{headerShown: false}}
+                    component={IndexScreen}
+                  />
+                  <Stack.Screen
+                    name={ROUTES.LOGIN}
+                    options={{headerShown: false}}
+                    component={LoginScreen}
+                  />
+                  <Stack.Screen
+                    name={ROUTES.APP}
+                    options={{headerShown: false}}
+                    component={MainAppScreen}
+                  />
+                  <Stack.Screen
+                    name={ROUTES.INVOICE_CHECKOUT}
+                    component={InvoiceCheckoutScreen}
+                    options={{
+                      title: 'Invoice',
+                      headerTintColor: 'black',
+                      headerBackVisible: true,
+                    }}
+                  />
+                </Stack.Navigator>
+              </NavigationContainer>
+            </PaperProvider>
+          </NativeBaseProvider>
           <Toast />
         </AppContextProvider>
       </QueryClientProvider>

@@ -19,6 +19,7 @@ type StoreContextType = {
   currentStore: StoreType;
   currentInvoice: any;
   setCurrentInvoice: (invoice: any) => void;
+  status: string;
 };
 
 export const StoreContext = createContext<StoreContextType>({
@@ -27,13 +28,15 @@ export const StoreContext = createContext<StoreContextType>({
   currentStore: {} as StoreType,
   currentInvoice: {},
   setCurrentInvoice: (invoice: any) => {},
+  status: 'new',
 });
 
 export const StoreContextProvider = ({children}: {children: ReactNode}) => {
   const [stores, setStores] = useState([]);
-  const [currentInvoice, setCurrentInvoice] = useState({});
-  const [currentStore, setCurrentStore] = useState({});
+  const [currentInvoice, setCurrentInvoice] = useState<any>({});
+  const [currentStore, setCurrentStore] = useState<any>({});
   const navigation = useNavigation();
+  const [status, setStatus] = useState<string | null>('new');
 
   useEffect(() => {
     (async () => {
@@ -59,6 +62,22 @@ export const StoreContextProvider = ({children}: {children: ReactNode}) => {
     queryKey: ['stores'],
   });
 
+  const fetchInvoiceStatus = async () => {
+    const response = await axios({
+      url: `/store/${currentStore?.id}/invoice/${currentInvoice?.id}/status`,
+      navigation,
+    });
+
+    return response;
+  };
+
+  const {data: pollingData} = useQuery({
+    queryKey: [`invoice-${currentInvoice?.id}`],
+    queryFn: fetchInvoiceStatus,
+    refetchInterval: 3000,
+    enabled: currentInvoice?.id && currentStore?.id && status === 'new',
+  });
+
   useEffect(() => {
     if (data) {
       setStores(data);
@@ -70,6 +89,12 @@ export const StoreContextProvider = ({children}: {children: ReactNode}) => {
     }
   }, [data]);
 
+  useEffect(() => {
+    if (pollingData) {
+      setStatus(pollingData?.status);
+    }
+  }, [pollingData, data]);
+
   const value: any = useMemo(
     () => ({
       stores,
@@ -77,8 +102,9 @@ export const StoreContextProvider = ({children}: {children: ReactNode}) => {
       currentStore,
       currentInvoice,
       setCurrentInvoice,
+      status,
     }),
-    [stores, isLoading, currentStore, currentInvoice],
+    [stores, isLoading, currentStore, currentInvoice, status],
   );
 
   return (
