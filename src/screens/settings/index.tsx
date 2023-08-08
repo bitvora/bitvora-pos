@@ -9,15 +9,18 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import {COLORS, NODELESS_URL} from '../../lib/constants';
+import ActionSheet from '../../components/ActionSheet';
+import {Radio} from 'native-base';
 
 const SettingsScreen = () => {
   const {
     defaultCurrency,
     defaultTimezone,
-    setDefaultCurrency,
-    setDefaultTimezone,
+    // setDefaultCurrency,
+    // setDefaultTimezone,
   } = useContext(AppContext);
-  const {currentStore} = useContext(StoreContext);
+
+  const {currentStore, stores, setCurrentStore} = useContext(StoreContext);
 
   const handleLinkPress = () => {
     Linking.openURL(NODELESS_URL).catch(err =>
@@ -35,13 +38,38 @@ const SettingsScreen = () => {
             <MaterialCommunityIcons name="store" color="#f5571e" size={21} />
           </View>
 
-          <View style={styles.storeNameView}>
-            <Text style={styles.storeName}>{currentStore?.name}</Text>
+          <ActionSheet
+            trigger={
+              <View style={styles.storeNameView}>
+                <Text style={styles.storeName}>{currentStore?.name}</Text>
 
-            <View>
-              <Feather name="edit-3" color="#9CA3AF" size={16} />
-            </View>
-          </View>
+                <View>
+                  <Feather name="edit-3" color="#9CA3AF" size={16} />
+                </View>
+              </View>
+            }
+            content={
+              <Radio.Group
+                value={currentStore?.id}
+                name="stores"
+                onChange={id => {
+                  const newStore = stores.find(store => store.id === id);
+                  setCurrentStore(newStore);
+                }}>
+                {stores.map(store => (
+                  <View key={store?.id} style={styles.storeItem}>
+                    <Radio
+                      value={store?.id}
+                      my={1}
+                      size="sm"
+                      colorScheme="primary">
+                      <Text style={styles.storeItemText}>{store?.name}</Text>
+                    </Radio>
+                  </View>
+                ))}
+              </Radio.Group>
+            }
+          />
         </View>
 
         <View style={styles.section}>

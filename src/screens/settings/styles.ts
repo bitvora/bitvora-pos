@@ -82,6 +82,14 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     marginLeft: 5,
   },
+  storeItem: {
+    marginBottom: 15,
+  },
+  storeItemText: {
+    color: '#374151',
+    fontSize: 14,
+    fontWeight: '600',
+  },
 });
 
 export default styles;

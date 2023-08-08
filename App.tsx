@@ -7,7 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FeatherIcons from 'react-native-vector-icons/Feather';
 import AntDesignIcons from 'react-native-vector-icons/AntDesign';
 import {NativeBaseProvider} from 'native-base';
-
+import customTheme from './src/lib/theme';
 import HomeScreen from './src/screens/home';
 import IndexScreen from './src/screens/index/index';
 import LoginScreen from './src/screens/login';
@@ -53,7 +53,7 @@ const MainAppScreen = () => {
       <Tab.Navigator
         activeColor="#FD7014"
         inactiveColor="#374151"
-        initialRouteName={ROUTES.HOME}
+        initialRouteName={ROUTES.SETTINGS}
         barStyle={styles.tabBar}>
         <Tab.Screen
           name={ROUTES.HOME}
@@ -104,10 +104,10 @@ function App(): JSX.Element {
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
         <AppContextProvider>
-          <NativeBaseProvider>
+          <NativeBaseProvider theme={customTheme}>
             <PaperProvider>
               <NavigationContainer theme={MyTheme}>
-                <Stack.Navigator initialRouteName={ROUTES.INDEX}>
+                <Stack.Navigator initialRouteName={ROUTES.APP}>
                   <Stack.Screen
                     name={ROUTES.INDEX}
                     options={{headerShown: false}}
