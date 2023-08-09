@@ -90,6 +90,26 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
+  currencyView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  currencyText: {
+    color: '#374151',
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  imageView: {
+    width: 15,
+    height: 15,
+    borderRadius: 7,
+  },
+  header: {
+    color: '#374151',
+    fontSize: 14,
+    fontWeight: '600',
+    marginVertical: 30,
+  },
 });
 
 export default styles;

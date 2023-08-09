@@ -16,7 +16,12 @@ const ActionSheet = ({content, trigger}: Props) => {
 
       <Actionsheet isOpen={isOpen} onClose={onClose}>
         <Actionsheet.Content>
-          <Box w="100%" px={4} justifyContent="center">
+          <Box
+            w="100%"
+            px={4}
+            maxHeight={'lg'}
+            overflowY="auto"
+            justifyContent="center">
             {content}
           </Box>
         </Actionsheet.Content>
