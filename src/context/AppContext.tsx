@@ -37,7 +37,7 @@ export const AppContext = createContext<AppContextType>({
 
 export const AppContextProvider = ({children}: {children: ReactNode}) => {
   const [btcToUSD, setBtcToUSD] = useState(0);
-  const [defaultCurrency, setCurrency] = useState('');
+  const [defaultCurrency, setCurrency] = useState('USD');
   const [defaultTimezone, setTimezone] = useState<any>({});
 
   const setDefaultCurrency = (currency: string) => {
@@ -52,7 +52,7 @@ export const AppContextProvider = ({children}: {children: ReactNode}) => {
 
   useEffect(() => {
     (async () => {
-      const cachedPrice = await getData(STORAGE_KEYS.BTC_TO_USD);
+      const cachedPrice = await getData(STORAGE_KEYS.BTC_PRICE);
       const cachedCurrency = await getData(STORAGE_KEYS.DEFAULT_CURRENCY);
       const cachedTimezone = await getData(STORAGE_KEYS.DEFAULT_TIMEZONE);
 
@@ -63,7 +63,6 @@ export const AppContextProvider = ({children}: {children: ReactNode}) => {
       if (cachedCurrency) {
         setCurrency(cachedCurrency);
       } else {
-        setCurrency('USD');
         setData(STORAGE_KEYS.DEFAULT_CURRENCY, 'USD');
       }
 
@@ -81,7 +80,7 @@ export const AppContextProvider = ({children}: {children: ReactNode}) => {
 
   const fetchBTCPrice = async () => {
     const response = await axios.get(
-      `${COIN_GECKO_API}/simple/price?ids=bitcoin&vs_currencies=usd`,
+      `${COIN_GECKO_API}/simple/price?ids=bitcoin&vs_currencies=${defaultCurrency.toLowerCase()}`,
     );
 
     return response?.data;
@@ -89,16 +88,18 @@ export const AppContextProvider = ({children}: {children: ReactNode}) => {
 
   const {data} = useQuery({
     queryFn: fetchBTCPrice,
-    queryKey: ['BTCToUSD'],
+    queryKey: [`BTC-${defaultCurrency}`],
     refetchInterval: 100000,
   });
 
   useEffect(() => {
     if (data) {
-      setBtcToUSD(Number(data?.bitcoin?.usd));
-      setData(STORAGE_KEYS.BTC_TO_USD, data?.bitcoin?.usd);
+      const value = data?.bitcoin[defaultCurrency.toLowerCase()];
+
+      setBtcToUSD(Number(value));
+      setData(STORAGE_KEYS.BTC_PRICE, value);
     }
-  }, [data]);
+  }, [data, defaultCurrency]);
 
   const value: any = useMemo(
     () => ({
