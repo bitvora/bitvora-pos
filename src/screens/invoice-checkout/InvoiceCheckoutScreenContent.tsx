@@ -6,7 +6,7 @@ import {StoreContext} from '../../context/StoreContext';
 import Lightning from './Lightning';
 import Onchain from './Onchain';
 import Unified from './Unified';
-// import InvoiceFailure from './InvoiceFailure';
+import InvoiceFailure from './InvoiceFailure';
 import InvoiceSuccess from './InvoiceSuccess';
 
 const TABS = {
@@ -64,6 +64,29 @@ const InvoiceCheckoutScreenContent = () => {
     setCurrentTab(tab);
   };
 
+  const renderContent = () => {
+    switch (status) {
+      case 'new':
+        return (
+          <View style={styles.content}>
+            <View style={styles.tabs}>
+              {TAB_ITEMS.map(item => TabItem({...item, changeTab, currentTab}))}
+            </View>
+
+            <View>
+              {currentTab === TABS.LIGHTNING && <Lightning />}
+              {currentTab === TABS.UNIFIED && <Unified />}
+              {currentTab === TABS.ONCHAIN && <Onchain />}
+            </View>
+          </View>
+        );
+      case 'paid':
+        return <InvoiceSuccess />;
+      default:
+        return <InvoiceFailure />;
+    }
+  };
+
   return (
     <View style={styles.container}>
       {currentInvoice?.buyerEmail && (
@@ -80,21 +103,7 @@ const InvoiceCheckoutScreenContent = () => {
         </Text>
       </View>
 
-      {status === 'new' && (
-        <View style={styles.content}>
-          <View style={styles.tabs}>
-            {TAB_ITEMS.map(item => TabItem({...item, changeTab, currentTab}))}
-          </View>
-
-          <View>
-            {currentTab === TABS.LIGHTNING && <Lightning />}
-            {currentTab === TABS.UNIFIED && <Unified />}
-            {currentTab === TABS.ONCHAIN && <Onchain />}
-          </View>
-        </View>
-      )}
-
-      {status === 'paid' && <InvoiceSuccess />}
+      {renderContent()}
     </View>
   );
 };

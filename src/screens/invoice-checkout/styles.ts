@@ -120,13 +120,23 @@ const styles = StyleSheet.create({
   statusContent: {
     marginVertical: 20,
     justifyContent: 'center',
-    textAlign: 'center',
+    alignItems: 'center',
   },
   statusText: {
     textAlign: 'center',
     color: '#6B7280',
     fontSize: 15,
     fontWeight: '600',
+  },
+  imageContainer: {
+    textAlign: 'center',
+    marginVertical: 30,
+    marginHorizontal: 'auto',
+    justifyContent: 'center',
+  },
+  gif: {
+    width: 250,
+    height: 250,
   },
 });
 
