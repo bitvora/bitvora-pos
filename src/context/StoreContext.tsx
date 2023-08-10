@@ -17,6 +17,7 @@ type StoreContextType = {
   isLoading: boolean;
   stores: StoreType[];
   currentStore: StoreType;
+  setCurrentStore: (payload: any) => void;
   currentInvoice: any;
   setCurrentInvoice: (invoice: any) => void;
   status: string;
@@ -29,6 +30,7 @@ export const StoreContext = createContext<StoreContextType>({
   currentInvoice: {},
   setCurrentInvoice: (invoice: any) => {},
   status: 'new',
+  setCurrentStore: (payload: any) => {},
 });
 
 export const StoreContextProvider = ({children}: {children: ReactNode}) => {
@@ -42,6 +44,7 @@ export const StoreContextProvider = ({children}: {children: ReactNode}) => {
     (async () => {
       const invoice = await getData(STORAGE_KEYS.INVOICE_DATA);
       const cachedStores = await getData(STORAGE_KEYS.STORES);
+
       setCurrentInvoice(invoice);
       setStores(cachedStores);
       setCurrentStore(cachedStores[0]);
@@ -103,8 +106,9 @@ export const StoreContextProvider = ({children}: {children: ReactNode}) => {
       currentInvoice,
       setCurrentInvoice,
       status,
+      setCurrentStore,
     }),
-    [stores, isLoading, currentStore, currentInvoice, status],
+    [stores, isLoading, currentStore, currentInvoice, status, setCurrentStore],
   );
 
   return (

@@ -1,5 +1,4 @@
 import {StyleSheet, Dimensions} from 'react-native';
-
 import {COLORS} from '../../lib/constants';
 
 const windowHeight = Dimensions.get('window').height;
@@ -115,6 +114,59 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
     textAlign: 'center',
+  },
+  header: {
+    color: '#374151',
+    fontSize: 14,
+    fontWeight: '600',
+    marginVertical: 30,
+  },
+  storeItem: {
+    marginBottom: 15,
+  },
+  storeItemText: {
+    color: '#374151',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  currencyView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  currencyText: {
+    color: '#374151',
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  imageView: {
+    width: 15,
+    height: 15,
+    borderRadius: 7,
+  },
+  image: {
+    width: 15,
+    height: 15,
+  },
+  currencyContainer: {
+    flexDirection: 'row',
+    marginTop: 10,
+    marginBottom: 10,
+    alignContent: 'center',
+    backgroundColor: '#f4f4f4',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 30,
+  },
+  downIcon: {
+    marginRight: 10,
+    marginTop: 1,
+    fontSize: 16,
+  },
+  darkText: {
+    color: COLORS.DARK,
+    marginLeft: 10,
+    fontWeight: '600',
+    marginRight: 20,
   },
 });
 

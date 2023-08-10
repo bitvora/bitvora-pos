@@ -1,10 +1,9 @@
 import React, {useContext, useState} from 'react';
-import {Text, View, Dimensions, TouchableOpacity} from 'react-native';
+import {Text, View, Dimensions, TouchableOpacity, Image} from 'react-native';
 import {StoreContext} from '../../context/StoreContext';
 import {AppContext} from '../../context/AppContext';
 import Layout from '../../components/Layout';
-import CountryDropdown from '../../components/CountryDropdown';
-import {formatCurrency, convertToBTC} from '../../lib/helpers';
+import {formatCurrency, convertToBTC, showToast} from '../../lib/helpers';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
@@ -12,17 +11,38 @@ import styles from './styles';
 import axios from '../../lib/axios';
 import {useMutation} from '@tanstack/react-query';
 import {useNavigation} from '@react-navigation/native';
-import {showToast} from '../../lib/helpers';
 import {setData} from '../../lib/storage';
-import {ROUTES, STORAGE_KEYS} from '../../lib/constants';
+import {ROUTES, STORAGE_KEYS, COLORS} from '../../lib/constants';
+import AntDesignIcon from 'react-native-vector-icons/AntDesign';
+
+import ActionSheet from '../../components/ActionSheet';
+import {Radio} from 'native-base';
+import CURRENCIES from '../../lib/currencies';
 
 const windowHeight = Dimensions.get('window').height;
 
+const renderCurrencyIcon = (currency: string) => {
+  switch (currency) {
+    case 'CAD':
+      return (
+        <Image
+          source={require('../../assets/canada.png')}
+          style={styles.image}
+        />
+      );
+    case 'USD':
+    default:
+      return (
+        <Image source={require('../../assets/usa.png')} style={styles.image} />
+      );
+  }
+};
+
 const HomeScreen = () => {
   const {currentStore, setCurrentInvoice} = useContext(StoreContext);
-  const {btcToUSD} = useContext(AppContext);
+  const {btcToUSD, defaultCurrency, setDefaultCurrency} =
+    useContext(AppContext);
   const navigation = useNavigation();
-  const [selected, setSelected] = useState(undefined);
 
   const [value, setValue] = useState(0);
 
@@ -79,10 +99,44 @@ const HomeScreen = () => {
           <View style={styles.topContainer}>
             <Text style={styles.name}>{currentStore?.name}</Text>
 
-            <CountryDropdown
-              label="Select Item"
-              key={selected}
-              onSelect={setSelected}
+            <ActionSheet
+              trigger={
+                <View style={styles.currencyContainer}>
+                  {renderCurrencyIcon(defaultCurrency)}
+                  <Text style={styles.darkText}>{defaultCurrency}</Text>
+                  <AntDesignIcon
+                    name="down"
+                    color={COLORS.DARK}
+                    style={styles.downIcon}
+                  />
+                </View>
+              }
+              content={
+                <View>
+                  <Text style={styles.header}>Select Currency</Text>
+                  <Radio.Group
+                    value={defaultCurrency}
+                    name="currency"
+                    onChange={label => {
+                      setDefaultCurrency(label);
+                    }}>
+                    {CURRENCIES.map(({label, image}) => (
+                      <View key={label} style={styles.storeItem}>
+                        <Radio
+                          value={label}
+                          my={1}
+                          size="sm"
+                          colorScheme="primary">
+                          <View style={styles.currencyView}>
+                            <Text style={styles.currencyText}>{label}</Text>
+                            <View style={styles.imageView}>{image}</View>
+                          </View>
+                        </Radio>
+                      </View>
+                    ))}
+                  </Radio.Group>
+                </View>
+              }
             />
           </View>
 

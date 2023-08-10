@@ -8,22 +8,23 @@ import React, {
 } from 'react';
 import axios from 'axios';
 import {useQuery} from '@tanstack/react-query';
-import {
-  COIN_GECKO_API,
-  STORAGE_KEYS,
-  TIMEZONES,
-  CURRENCIES,
-} from '../lib/constants';
+import {COIN_GECKO_API, STORAGE_KEYS, TIMEZONES} from '../lib/constants';
 import {getData, setData} from '../lib/storage';
 import {findTimezoneByCode} from '../lib/helpers';
-import type {TimeZone} from 'timezones-list';
+
+interface TimeZone {
+  label: string;
+  tzCode: string;
+  name: string;
+  utc: string;
+}
 
 type AppContextType = {
   btcToUSD: number;
   defaultCurrency: string;
   setDefaultCurrency: (payload: string) => void;
   defaultTimezone: TimeZone;
-  setDefaultTimezone: (payload: TimeZone) => void;
+  setDefaultTimezone: (payload: any) => void;
 };
 
 export const AppContext = createContext<AppContextType>({
@@ -31,13 +32,23 @@ export const AppContext = createContext<AppContextType>({
   defaultCurrency: '',
   setDefaultCurrency: (payload: string) => {},
   defaultTimezone: {} as TimeZone,
-  setDefaultTimezone: (payload: TimeZone) => {},
+  setDefaultTimezone: (payload: any) => {},
 });
 
 export const AppContextProvider = ({children}: {children: ReactNode}) => {
   const [btcToUSD, setBtcToUSD] = useState(0);
-  const [defaultCurrency, setDefaultCurrency] = useState('');
-  const [defaultTimezone, setDefaultTimezone] = useState<any>({});
+  const [defaultCurrency, setCurrency] = useState('');
+  const [defaultTimezone, setTimezone] = useState<any>({});
+
+  const setDefaultCurrency = (currency: string) => {
+    setCurrency(currency);
+    setData(STORAGE_KEYS.DEFAULT_CURRENCY, currency);
+  };
+
+  const setDefaultTimezone = (tz: any) => {
+    setTimezone(tz);
+    setData(STORAGE_KEYS.DEFAULT_TIMEZONE, tz);
+  };
 
   useEffect(() => {
     (async () => {
@@ -50,19 +61,19 @@ export const AppContextProvider = ({children}: {children: ReactNode}) => {
       }
 
       if (cachedCurrency) {
-        setDefaultCurrency(cachedCurrency);
+        setCurrency(cachedCurrency);
       } else {
-        setDefaultCurrency(CURRENCIES[0].label);
-        setData(STORAGE_KEYS.DEFAULT_CURRENCY, CURRENCIES[0].label);
+        setCurrency('USD');
+        setData(STORAGE_KEYS.DEFAULT_CURRENCY, 'USD');
       }
 
       if (cachedTimezone) {
-        setDefaultTimezone(cachedTimezone);
+        setTimezone(cachedTimezone);
       } else {
         const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
         const tz = findTimezoneByCode(timeZone);
-        setDefaultTimezone(tz || TIMEZONES[0]);
+        setTimezone(tz || TIMEZONES[0]);
         setData(STORAGE_KEYS.DEFAULT_TIMEZONE, tz);
       }
     })();
@@ -97,6 +108,7 @@ export const AppContextProvider = ({children}: {children: ReactNode}) => {
       setDefaultCurrency,
       setDefaultTimezone,
     }),
+
     [btcToUSD, defaultCurrency, defaultTimezone],
   );
 
