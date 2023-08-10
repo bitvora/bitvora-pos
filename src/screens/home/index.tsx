@@ -142,7 +142,7 @@ const HomeScreen = () => {
 
           <View style={styles.amountContainer}>
             <Text style={value === 0 ? styles.inactiveAmount : styles.amount}>
-              {formatCurrency(value)}
+              {formatCurrency(value, defaultCurrency)}
             </Text>
             <Text style={styles.btcAmount}>
               {convertToBTC(value, btcToUSD)}
