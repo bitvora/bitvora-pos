@@ -45,6 +45,7 @@ const HomeScreen = () => {
   const navigation = useNavigation();
 
   const [value, setValue] = useState(0);
+  const [secondValue, setSecondValue] = useState(0);
 
   const _onNumberPress = (number: number) => () => {
     setValue(prevAmount => prevAmount * 10 + number * 0.01);
@@ -59,7 +60,15 @@ const HomeScreen = () => {
     setValue(newValue);
   };
 
-  const _onCancelPress = () => setValue(0);
+  const _onCancelPress = () => {
+    setValue(0);
+    setSecondValue(0);
+  };
+
+  const _onPlusPress = () => {
+    setSecondValue(value + secondValue);
+    setValue(0);
+  };
 
   const createInvoice = async () => {
     try {
@@ -164,7 +173,7 @@ const HomeScreen = () => {
               <Text style={styles.numberText}>9</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.number}>
+            <TouchableOpacity style={styles.number} onPress={_onPlusPress}>
               <Text style={styles.numberText}>+</Text>
             </TouchableOpacity>
 
@@ -218,13 +227,18 @@ const HomeScreen = () => {
               onPress={handleSubmit}
               disabled={value <= 0 || isLoading}
               style={
-                value > 0 ? styles.activeChargeButton : styles.chargeButton
+                value + secondValue > 0
+                  ? styles.activeChargeButton
+                  : styles.chargeButton
               }>
               <Text style={styles.chargeText}>
                 {isLoading ? (
                   <Feather name="loader" color="#fff" size={25} />
                 ) : (
-                  `Charge: ${formatCurrency(value)}`
+                  `Charge: ${formatCurrency(
+                    value + secondValue,
+                    defaultCurrency,
+                  )}`
                 )}
               </Text>
             </TouchableOpacity>
