@@ -176,7 +176,9 @@ const HomeScreen = () => {
             <TouchableOpacity style={styles.number} onPress={_onPlusPress}>
               <Text style={styles.numberText}>+</Text>
             </TouchableOpacity>
+          </View>
 
+          <View style={styles.keyboardContainer}>
             <TouchableOpacity onPress={_onNumberPress(4)} style={styles.number}>
               <Text style={styles.numberText}>4</Text>
             </TouchableOpacity>
@@ -196,7 +198,9 @@ const HomeScreen = () => {
                 <Ionicons name="arrow-back" color="#101928" size={25} />
               </Text>
             </TouchableOpacity>
+          </View>
 
+          <View style={styles.keyboardContainer}>
             <TouchableOpacity onPress={_onNumberPress(1)} style={styles.number}>
               <Text style={styles.numberText}>1</Text>
             </TouchableOpacity>

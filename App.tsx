@@ -24,6 +24,7 @@ import {AppContextProvider} from './src/context/AppContext';
 
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
+import SplashScreen from 'react-native-splash-screen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -89,6 +90,7 @@ const MainAppScreen = () => {
 const queryClient = new QueryClient();
 
 function App(): JSX.Element {
+  SplashScreen.hide();
   const theme = useTheme();
   theme.colors.secondaryContainer = 'transparent';
 
