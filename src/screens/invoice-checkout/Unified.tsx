@@ -1,53 +1,19 @@
 import React, {useContext} from 'react';
-import {View, Image, Text, TouchableOpacity} from 'react-native';
+import {View, Image} from 'react-native';
 import styles from './styles';
-import {copyToClipboard} from '../../lib/helpers';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import {StoreContext} from '../../context/StoreContext';
 
-const Lightning = () => {
+const Unified = () => {
   const {currentInvoice} = useContext(StoreContext);
 
   return (
     <View style={styles.lightningContainer}>
       <Image
-        source={{uri: currentInvoice?.qrCodes?.lightning}}
+        source={{uri: currentInvoice?.qrCodes?.unified}}
         style={styles.image}
       />
-
-      <Text style={styles.label}>Lightning Network</Text>
-
-      <View style={styles.footer}>
-        <Text numberOfLines={1} ellipsizeMode="tail" style={styles.invoiceText}>
-          {currentInvoice?.lightningInvoice}
-        </Text>
-
-        <Text style={styles.divider}>|</Text>
-
-        <TouchableOpacity
-          style={styles.copyButton}
-          onPress={() => copyToClipboard(currentInvoice?.lightningInvoice)}>
-          <Ionicons name="copy-outline" color="#374151" size={18} />
-        </TouchableOpacity>
-      </View>
-
-      <Text style={styles.label}>Blockchain</Text>
-
-      <View style={styles.footer}>
-        <Text numberOfLines={1} ellipsizeMode="tail" style={styles.invoiceText}>
-          {currentInvoice?.lightningInvoice}
-        </Text>
-
-        <Text style={styles.divider}>|</Text>
-
-        <TouchableOpacity
-          style={styles.copyButton}
-          onPress={() => copyToClipboard(currentInvoice?.lightningInvoice)}>
-          <Ionicons name="copy-outline" color="#374151" size={18} />
-        </TouchableOpacity>
-      </View>
     </View>
   );
 };
 
-export default Lightning;
+export default Unified;

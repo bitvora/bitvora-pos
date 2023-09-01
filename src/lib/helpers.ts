@@ -2,6 +2,7 @@ import Toast from 'react-native-toast-message';
 import Clipboard from '@react-native-community/clipboard';
 import dayjs from 'dayjs';
 import {TIMEZONES} from './constants';
+import millify from 'millify';
 
 export function formatCurrency(
   amount: number,
@@ -41,8 +42,11 @@ export const copyToClipboard = (
   showToast('info', message);
 };
 
-export const convertSatsToBTC = (value: number) =>
-  value ? value / 100000000 : 0;
+export const convertSatsToBTC = (value: number) => {
+  const result = value ? value / 100000000 : 0;
+
+  return `${result.toFixed(5)} BTC`;
+};
 
 export const addCommasToNumber = (number: number) => {
   return number ? number.toLocaleString() : 0;
@@ -54,3 +58,11 @@ export const formatDate = (date: string, format = 'MMM D, YYYY  hh:mm:ss A') =>
 export const findTimezoneByCode = (tzCode: string) => {
   return TIMEZONES.find(timezone => timezone.tzCode === tzCode);
 };
+
+export const formatSats = (sats: number, shorten = false) =>
+  shorten
+    ? `${millify(sats, {
+        precision: 3,
+        lowercase: true,
+      })} SATS`
+    : `${sats.toLocaleString()} SATS`;

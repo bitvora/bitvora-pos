@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     color: COLORS.DARK,
     fontWeight: '600',
     marginBottom: 5,
-    fontSize: 40,
+    fontSize: 35,
   },
   inactiveAmount: {
     color: '#d1d5db',
@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     textAlign: 'center',
   },
+
   keyboardContainer: {
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
     width: 70,
     height: 70,
     borderRadius: 15,
-    backgroundColor: '#fce96a',
+    backgroundColor: '#ff7847',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
@@ -146,6 +147,10 @@ const styles = StyleSheet.create({
   image: {
     width: 15,
     height: 15,
+  },
+  bitcoinImage: {
+    width: 20,
+    height: 20,
   },
   currencyContainer: {
     flexDirection: 'row',

@@ -3,7 +3,13 @@ import {Text, View, Dimensions, TouchableOpacity, Image} from 'react-native';
 import {StoreContext} from '../../context/StoreContext';
 import {AppContext} from '../../context/AppContext';
 import Layout from '../../components/Layout';
-import {formatCurrency, convertToBTC, showToast} from '../../lib/helpers';
+import {
+  formatCurrency,
+  convertToBTC,
+  showToast,
+  convertSatsToBTC,
+  formatSats,
+} from '../../lib/helpers';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
@@ -14,7 +20,6 @@ import {useNavigation} from '@react-navigation/native';
 import {setData} from '../../lib/storage';
 import {ROUTES, STORAGE_KEYS, COLORS} from '../../lib/constants';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
-
 import ActionSheet from '../../components/ActionSheet';
 import {Radio} from 'native-base';
 import CURRENCIES from '../../lib/currencies';
@@ -28,6 +33,13 @@ const renderCurrencyIcon = (currency: string) => {
         <Image
           source={require('../../assets/canada.png')}
           style={styles.image}
+        />
+      );
+    case 'SATS':
+      return (
+        <Image
+          source={require('../../assets/bitcoin.png')}
+          style={styles.bitcoinImage}
         />
       );
     case 'USD':
@@ -48,16 +60,32 @@ const HomeScreen = () => {
   const [secondValue, setSecondValue] = useState(0);
 
   const _onNumberPress = (number: number) => () => {
-    setValue(prevAmount => prevAmount * 10 + number * 0.01);
+    setValue(
+      prevAmount =>
+        prevAmount * 10 + number * (defaultCurrency === 'SATS' ? 1 : 0.01),
+    );
   };
 
   const _onDeletePress = () => {
-    let newValue = Math.floor(value * 10) / 100;
-    if (newValue < 0.01) {
-      newValue = 0;
-    }
+    if (defaultCurrency === 'SATS') {
+      if (value === 0) {
+        setValue(0);
+        return;
+      }
+      const currentNumber = value.toString();
 
-    setValue(newValue);
+      if (currentNumber.length > 0) {
+        const newNumber = currentNumber.slice(0, -1);
+        setValue(Number(newNumber));
+      }
+    } else {
+      let newValue = Math.floor(value * 10) / 100;
+      if (newValue < 0.01) {
+        newValue = 0;
+      }
+
+      setValue(newValue);
+    }
   };
 
   const _onCancelPress = () => {
@@ -76,7 +104,7 @@ const HomeScreen = () => {
         url: `/store/${currentStore?.id}/invoice`,
         method: 'POST',
         navigation,
-        payload: {amount: value, currency: 'USD'},
+        payload: {amount: value, currency: defaultCurrency},
       });
 
       return response?.data;
@@ -151,10 +179,14 @@ const HomeScreen = () => {
 
           <View style={styles.amountContainer}>
             <Text style={value === 0 ? styles.inactiveAmount : styles.amount}>
-              {formatCurrency(value, defaultCurrency)}
+              {defaultCurrency === 'SATS'
+                ? formatSats(value)
+                : formatCurrency(value, defaultCurrency)}
             </Text>
             <Text style={styles.btcAmount}>
-              {convertToBTC(value, btcToUSD)}
+              {defaultCurrency === 'SATS'
+                ? convertSatsToBTC(value)
+                : convertToBTC(value, btcToUSD)}
             </Text>
           </View>
         </View>
@@ -195,7 +227,7 @@ const HomeScreen = () => {
               onPress={_onDeletePress}
               style={styles.backButton}>
               <Text style={styles.numberText}>
-                <Ionicons name="arrow-back" color="#101928" size={25} />
+                <Ionicons name="arrow-back" color="#fff" size={22} />
               </Text>
             </TouchableOpacity>
           </View>
@@ -239,10 +271,11 @@ const HomeScreen = () => {
                 {isLoading ? (
                   <Feather name="loader" color="#fff" size={25} />
                 ) : (
-                  `Charge: ${formatCurrency(
-                    value + secondValue,
-                    defaultCurrency,
-                  )}`
+                  `Charge: ${
+                    defaultCurrency === 'SATS'
+                      ? formatSats(value, true)
+                      : formatCurrency(value + secondValue, defaultCurrency)
+                  }`
                 )}
               </Text>
             </TouchableOpacity>
