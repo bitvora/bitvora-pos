@@ -90,6 +90,7 @@ export const AppContextProvider = ({children}: {children: ReactNode}) => {
     queryFn: fetchBTCPrice,
     queryKey: [`BTC-${defaultCurrency}`],
     refetchInterval: 100000,
+    enabled: defaultCurrency === 'USD' || defaultCurrency === 'CAD',
   });
 
   useEffect(() => {

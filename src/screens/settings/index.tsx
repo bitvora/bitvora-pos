@@ -11,11 +11,14 @@ import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import {
   COLORS,
   NODELESS_URL,
+  STORAGE_KEYS,
+
   // TIMEZONES
 } from '../../lib/constants';
 import ActionSheet from '../../components/ActionSheet';
 import {Radio} from 'native-base';
 import CURRENCIES from '../../lib/currencies';
+import {setData} from '../../lib/storage';
 
 const SettingsScreen = () => {
   const {
@@ -62,6 +65,7 @@ const SettingsScreen = () => {
                   name="stores"
                   onChange={id => {
                     const newStore = stores.find(store => store.id === id);
+                    setData(STORAGE_KEYS.CURRENT_STORE, newStore);
                     setCurrentStore(newStore);
                   }}>
                   {stores.map(store => (

@@ -21,6 +21,15 @@ const CURRENCIES = [
       />
     ),
   },
+  {
+    label: 'SATS',
+    image: (
+      <Image
+        source={require('../assets/bitcoin.png')}
+        style={{width: 25, height: 25, marginLeft: 5, marginTop: -5}}
+      />
+    ),
+  },
 ];
 
 export default CURRENCIES;

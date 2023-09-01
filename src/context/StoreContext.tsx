@@ -40,17 +40,6 @@ export const StoreContextProvider = ({children}: {children: ReactNode}) => {
   const navigation = useNavigation();
   const [status, setStatus] = useState<string | null>('new');
 
-  useEffect(() => {
-    (async () => {
-      const invoice = await getData(STORAGE_KEYS.INVOICE_DATA);
-      const cachedStores = await getData(STORAGE_KEYS.STORES);
-
-      setCurrentInvoice(invoice);
-      setStores(cachedStores);
-      setCurrentStore(cachedStores[0]);
-    })();
-  }, []);
-
   const fetchStores = async () => {
     const response = await axios({
       url: '/store',
@@ -82,15 +71,28 @@ export const StoreContextProvider = ({children}: {children: ReactNode}) => {
   });
 
   useEffect(() => {
+    (async () => {
+      const invoice = await getData(STORAGE_KEYS.INVOICE_DATA);
+      const cachedStores = await getData(STORAGE_KEYS.STORES);
+      const cachedCurrentStore = await getData(STORAGE_KEYS.CURRENT_STORE);
+
+      setCurrentInvoice(invoice);
+      setStores(cachedStores);
+      setCurrentStore(cachedCurrentStore);
+    })();
+  }, []);
+
+  useEffect(() => {
     if (data) {
       setStores(data);
-      if (data.length > 0) {
-        setCurrentStore(data[0]);
-      }
-
       setData(STORAGE_KEYS.STORES, data);
+
+      if (!currentStore.id) {
+        setCurrentStore(data[0]);
+        setData(STORAGE_KEYS.CURRENT_STORE, data[0]);
+      }
     }
-  }, [data]);
+  }, [currentStore.id, data]);
 
   useEffect(() => {
     if (pollingData) {

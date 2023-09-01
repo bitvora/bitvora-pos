@@ -1,4 +1,3 @@
-import Config from 'react-native-config';
 import timezones from './tz.json';
 
 export const ROUTES = {
@@ -11,7 +10,7 @@ export const ROUTES = {
   INVOICE_CHECKOUT: 'INVOICE_CHECKOUT',
 };
 
-export const NODELESS_URL = Config.BASE_URL || '';
+export const NODELESS_URL = 'https://testnet.nodeless.io';
 
 export const STORAGE_KEYS = {
   API_KEY: 'API_KEY',
@@ -20,6 +19,7 @@ export const STORAGE_KEYS = {
   STORES: 'STORES',
   DEFAULT_TIMEZONE: 'UTC',
   DEFAULT_CURRENCY: 'USD',
+  CURRENT_STORE: 'CURRENT_STORE',
 };
 
 export const TIMEZONES = timezones;
