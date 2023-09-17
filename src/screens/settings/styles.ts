@@ -110,7 +110,12 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginVertical: 30,
   },
-  
+  logout: {
+    color: 'red',
+    fontSize: 16,
+    fontWeight: '600',
+    textDecorationLine: 'underline',
+  },
 });
 
 export default styles;

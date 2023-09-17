@@ -26,11 +26,15 @@ export const TransactionsContextProvider = ({
   const [transactions, setTransactions] = useState([]);
 
   const fetchTransactions = async () => {
-    const response = await axios({
-      url: '/transaction',
-    });
+    try {
+      const response = await axios({
+        url: '/transaction',
+      });
 
-    return response;
+      return response?.data;
+    } catch (err) {
+      return [];
+    }
   };
 
   const {isLoading, data} = useQuery({
@@ -40,7 +44,7 @@ export const TransactionsContextProvider = ({
 
   useEffect(() => {
     if (data) {
-      setTransactions(data?.data);
+      setTransactions(data);
     }
   }, [data]);
 

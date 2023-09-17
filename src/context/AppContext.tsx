@@ -25,6 +25,7 @@ type AppContextType = {
   setDefaultCurrency: (payload: string) => void;
   defaultTimezone: TimeZone;
   setDefaultTimezone: (payload: any) => void;
+  clearAppContext: () => void;
 };
 
 export const AppContext = createContext<AppContextType>({
@@ -33,6 +34,7 @@ export const AppContext = createContext<AppContextType>({
   setDefaultCurrency: (payload: string) => {},
   defaultTimezone: {} as TimeZone,
   setDefaultTimezone: (payload: any) => {},
+  clearAppContext: () => {},
 });
 
 export const AppContextProvider = ({children}: {children: ReactNode}) => {
@@ -48,6 +50,12 @@ export const AppContextProvider = ({children}: {children: ReactNode}) => {
   const setDefaultTimezone = (tz: any) => {
     setTimezone(tz);
     setData(STORAGE_KEYS.DEFAULT_TIMEZONE, tz);
+  };
+
+  const clearAppContext = () => {
+    setBtcToUSD(0);
+    setCurrency('USD');
+    setTimezone({});
   };
 
   useEffect(() => {
@@ -79,11 +87,15 @@ export const AppContextProvider = ({children}: {children: ReactNode}) => {
   }, []);
 
   const fetchBTCPrice = async () => {
-    const response = await axios.get(
-      `${COIN_GECKO_API}/simple/price?ids=bitcoin&vs_currencies=${defaultCurrency.toLowerCase()}`,
-    );
+    try {
+      const response = await axios.get(
+        `${COIN_GECKO_API}/simple/price?ids=bitcoin&vs_currencies=${defaultCurrency.toLowerCase()}`,
+      );
 
-    return response?.data;
+      return response?.data;
+    } catch (err) {
+      return null;
+    }
   };
 
   const {data} = useQuery({
@@ -109,6 +121,7 @@ export const AppContextProvider = ({children}: {children: ReactNode}) => {
       defaultTimezone,
       setDefaultCurrency,
       setDefaultTimezone,
+      clearAppContext,
     }),
 
     [btcToUSD, defaultCurrency, defaultTimezone],

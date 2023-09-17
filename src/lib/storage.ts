@@ -1,4 +1,5 @@
 import EncryptedStorage from 'react-native-encrypted-storage';
+import {STORAGE_KEYS} from './constants';
 
 export const setData = async (key: string, payload: any) => {
   try {
@@ -27,5 +28,13 @@ export const deleteData = async (key: string) => {
 export const clearStorage = async () => {
   try {
     await EncryptedStorage.clear();
-  } catch (error) {}
+
+    for (const key of Object.keys(STORAGE_KEYS)) {
+      //@ts-ignore
+      const value = STORAGE_KEYS[key];
+      await EncryptedStorage.removeItem(value);
+    }
+  } catch (error) {
+    console.log('not clear');
+  }
 };

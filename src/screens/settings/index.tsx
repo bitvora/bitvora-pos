@@ -18,22 +18,36 @@ import {
 import ActionSheet from '../../components/ActionSheet';
 import {Radio} from 'native-base';
 import CURRENCIES from '../../lib/currencies';
-import {setData} from '../../lib/storage';
+import {ROUTES} from '../../lib/constants';
+import {setData, clearStorage} from '../../lib/storage';
+import {useNavigation} from '@react-navigation/native';
 
 const SettingsScreen = () => {
+  const {navigate} = useNavigation();
+
   const {
+    clearAppContext,
     defaultCurrency,
     // defaultTimezone,
     setDefaultCurrency,
     // setDefaultTimezone,
   } = useContext(AppContext);
 
-  const {currentStore, stores, setCurrentStore} = useContext(StoreContext);
+  const {currentStore, stores, setCurrentStore, clearStoreContext} =
+    useContext(StoreContext);
 
   const handleLinkPress = () => {
     Linking.openURL(NODELESS_URL).catch(err =>
       console.error('An error occurred:', err),
     );
+  };
+
+  const logout = async () => {
+    await clearStorage();
+    clearStoreContext();
+    clearAppContext();
+    //@ts-ignore
+    navigate(ROUTES.INDEX);
   };
 
   return (
@@ -186,6 +200,12 @@ const SettingsScreen = () => {
               <Text style={styles.linkText}>nodeless account</Text>
             </TouchableOpacity>{' '}
           </Text>
+        </View>
+
+        <View style={styles.more}>
+          <TouchableOpacity onPress={logout}>
+            <Text style={styles.logout}>Logout</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </Layout>

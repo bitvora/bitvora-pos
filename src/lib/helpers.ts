@@ -9,7 +9,10 @@ export function formatCurrency(
   currency = 'USD',
   locale = 'en',
 ) {
-  return amount.toLocaleString(locale, {style: 'currency', currency});
+  return amount.toLocaleString(locale, {
+    style: 'currency',
+    currency: currency ? currency : 'USD',
+  });
 }
 
 function truncateNumber(number: number, decimalPlaces: number) {

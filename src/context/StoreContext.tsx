@@ -21,6 +21,7 @@ type StoreContextType = {
   currentInvoice: any;
   setCurrentInvoice: (invoice: any) => void;
   status: string;
+  clearStoreContext: () => void;
 };
 
 export const StoreContext = createContext<StoreContextType>({
@@ -31,6 +32,7 @@ export const StoreContext = createContext<StoreContextType>({
   setCurrentInvoice: (invoice: any) => {},
   status: 'new',
   setCurrentStore: (payload: any) => {},
+  clearStoreContext: () => {},
 });
 
 export const StoreContextProvider = ({children}: {children: ReactNode}) => {
@@ -40,13 +42,24 @@ export const StoreContextProvider = ({children}: {children: ReactNode}) => {
   const navigation = useNavigation();
   const [status, setStatus] = useState<string | null>('new');
 
-  const fetchStores = async () => {
-    const response = await axios({
-      url: '/store',
-      navigation,
-    });
+  const clearStoreContext = () => {
+    setStores([]);
+    setCurrentInvoice({});
+    setCurrentStore({});
+    setStatus('new');
+  };
 
-    return response?.data;
+  const fetchStores = async () => {
+    try {
+      const response = await axios({
+        url: '/store',
+        navigation,
+      });
+
+      return response?.data;
+    } catch (err) {
+      return [];
+    }
   };
 
   const {isLoading, data} = useQuery({
@@ -55,12 +68,16 @@ export const StoreContextProvider = ({children}: {children: ReactNode}) => {
   });
 
   const fetchInvoiceStatus = async () => {
-    const response = await axios({
-      url: `/store/${currentStore?.id}/invoice/${currentInvoice?.id}/status`,
-      navigation,
-    });
+    try {
+      const response = await axios({
+        url: `/store/${currentStore?.id}/invoice/${currentInvoice?.id}/status`,
+        navigation,
+      });
 
-    return response;
+      return response?.data;
+    } catch (err) {
+      return null;
+    }
   };
 
   const {data: pollingData} = useQuery({
@@ -96,7 +113,7 @@ export const StoreContextProvider = ({children}: {children: ReactNode}) => {
 
   useEffect(() => {
     if (pollingData) {
-      setStatus(pollingData?.status);
+      setStatus(pollingData);
     }
   }, [pollingData, data]);
 
@@ -109,6 +126,7 @@ export const StoreContextProvider = ({children}: {children: ReactNode}) => {
       setCurrentInvoice,
       status,
       setCurrentStore,
+      clearStoreContext,
     }),
     [stores, isLoading, currentStore, currentInvoice, status, setCurrentStore],
   );
