@@ -12,19 +12,18 @@ import {
   COLORS,
   NODELESS_URL,
   STORAGE_KEYS,
+  ROUTES,
 
   // TIMEZONES
 } from '../../lib/constants';
 import ActionSheet from '../../components/ActionSheet';
 import {Radio} from 'native-base';
 import CURRENCIES from '../../lib/currencies';
-import {ROUTES} from '../../lib/constants';
 import {setData, clearStorage} from '../../lib/storage';
 import {useNavigation} from '@react-navigation/native';
 
 const SettingsScreen = () => {
   const {navigate} = useNavigation();
-
   const {
     clearAppContext,
     defaultCurrency,
@@ -55,49 +54,53 @@ const SettingsScreen = () => {
       <Header title="Settings" />
 
       <View style={styles.container}>
-        <View style={styles.section}>
-          <View style={styles.iconContainer}>
-            <MaterialCommunityIcons name="store" color="#f5571e" size={21} />
-          </View>
+        {currentStore?.id && (
+          <View style={styles.section}>
+            <View style={styles.iconContainer}>
+              <MaterialCommunityIcons name="store" color="#f5571e" size={21} />
+            </View>
 
-          <ActionSheet
-            trigger={
-              <View style={styles.storeNameView}>
-                <Text style={styles.storeName}>{currentStore?.name}</Text>
+            <ActionSheet
+              trigger={
+                <View style={styles.storeNameView}>
+                  <Text style={styles.storeName}>{currentStore?.name}</Text>
 
-                <View>
-                  <Feather name="edit-3" color="#9CA3AF" size={16} />
+                  <View>
+                    <Feather name="edit-3" color="#9CA3AF" size={16} />
+                  </View>
                 </View>
-              </View>
-            }
-            content={
-              <View>
-                <Text style={styles.header}>Select Store</Text>
+              }
+              content={
+                <View>
+                  <Text style={styles.header}>Select Store</Text>
 
-                <Radio.Group
-                  value={currentStore?.id}
-                  name="stores"
-                  onChange={id => {
-                    const newStore = stores.find(store => store.id === id);
-                    setData(STORAGE_KEYS.CURRENT_STORE, newStore);
-                    setCurrentStore(newStore);
-                  }}>
-                  {stores.map(store => (
-                    <View key={store?.id} style={styles.storeItem}>
-                      <Radio
-                        value={store?.id}
-                        my={1}
-                        size="sm"
-                        colorScheme="primary">
-                        <Text style={styles.storeItemText}>{store?.name}</Text>
-                      </Radio>
-                    </View>
-                  ))}
-                </Radio.Group>
-              </View>
-            }
-          />
-        </View>
+                  <Radio.Group
+                    value={currentStore?.id}
+                    name="stores"
+                    onChange={id => {
+                      const newStore = stores.find(store => store.id === id);
+                      setData(STORAGE_KEYS.CURRENT_STORE, newStore);
+                      setCurrentStore(newStore);
+                    }}>
+                    {stores.map(store => (
+                      <View key={store?.id} style={styles.storeItem}>
+                        <Radio
+                          value={store?.id}
+                          my={1}
+                          size="sm"
+                          colorScheme="primary">
+                          <Text style={styles.storeItemText}>
+                            {store?.name}
+                          </Text>
+                        </Radio>
+                      </View>
+                    ))}
+                  </Radio.Group>
+                </View>
+              }
+            />
+          </View>
+        )}
 
         <View style={styles.section}>
           <View style={styles.item}>

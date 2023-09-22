@@ -33,6 +33,7 @@ export const TransactionsContextProvider = ({
 
       return response?.data;
     } catch (err) {
+      console.log('Fetch transactions error:', err);
       return [];
     }
   };

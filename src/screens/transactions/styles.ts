@@ -91,6 +91,16 @@ const styles = StyleSheet.create({
   skeletonView: {
     padding: 30,
   },
+  noTransactionsView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    textAlign: 'center',
+  },
+  noTransactionsText: {
+    color: '#6c7280',
+    fontSize: 16,
+  },
 });
 
 export default styles;
