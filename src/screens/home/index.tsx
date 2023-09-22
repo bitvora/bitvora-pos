@@ -14,7 +14,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import styles from './styles';
-import axios from '../../lib/axios';
+import {makePostReq} from '../../lib/axios';
 import {useMutation} from '@tanstack/react-query';
 import {useNavigation} from '@react-navigation/native';
 import {setData} from '../../lib/storage';
@@ -100,15 +100,16 @@ const HomeScreen = () => {
 
   const createInvoice = async () => {
     try {
-      const response = await axios({
+      const response = await makePostReq({
         url: `/store/${currentStore?.id}/invoice`,
-        method: 'POST',
-        navigation,
         payload: {amount: value, currency: defaultCurrency},
       });
 
       return response?.data;
-    } catch (err) {}
+    } catch (err) {
+      const error: any = err;
+      throw new Error(error);
+    }
   };
 
   const {isLoading, mutateAsync} = useMutation(createInvoice, {
@@ -120,9 +121,6 @@ const HomeScreen = () => {
       //@ts-ignore
       navigation.navigate(ROUTES.INVOICE_CHECKOUT);
     },
-    onError: () => {
-      showToast('error', 'Error creating invoice. Please, try again!');
-    },
   });
 
   const handleSubmit = async () => {
@@ -130,6 +128,8 @@ const HomeScreen = () => {
       showToast('error', 'You have no store!');
       return;
     }
+
+    setCurrentInvoice({});
     await mutateAsync();
   };
 

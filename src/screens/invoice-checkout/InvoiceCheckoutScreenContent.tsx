@@ -99,7 +99,7 @@ const InvoiceCheckoutScreenContent = () => {
           {addCommasToNumber(currentInvoice?.satsAmount)} SATS
         </Text>
         <Text style={styles.amountInBTC}>
-          {convertSatsToBTC(currentInvoice?.satsAmount)} BTC
+          {convertSatsToBTC(currentInvoice?.satsAmount)}
         </Text>
       </View>
 

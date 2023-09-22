@@ -37,4 +37,28 @@ const useFetch = async ({
   return response.data;
 };
 
+export const makePostReq = async ({
+  url,
+  payload,
+}: {
+  url: string;
+  payload: any;
+}) => {
+  const authKey = await getData(STORAGE_KEYS.API_KEY);
+
+  try {
+    const response = await axios.post(`${NODELESS_URL}/api/v1${url}`, payload, {
+      headers: {
+        Authorization: authKey ? `Bearer ${authKey}` : '',
+      },
+    });
+
+    return response?.data;
+  } catch (err) {
+    const error: any = err;
+    showToast('error', error?.response?.data?.message);
+    throw new Error(error?.response?.data?.message);
+  }
+};
+
 export default useFetch;
