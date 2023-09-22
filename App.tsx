@@ -91,7 +91,6 @@ const queryClient = new QueryClient();
 
 function App(): JSX.Element {
   SplashScreen.hide();
-  
   const theme = useTheme();
   theme.colors.secondaryContainer = 'transparent';
 

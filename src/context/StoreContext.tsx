@@ -58,6 +58,7 @@ export const StoreContextProvider = ({children}: {children: ReactNode}) => {
 
       return response?.data;
     } catch (err) {
+      console.log('Fetch stores error:', err);
       return [];
     }
   };
@@ -74,9 +75,10 @@ export const StoreContextProvider = ({children}: {children: ReactNode}) => {
         navigation,
       });
 
-      return response?.data;
+      return response?.status;
     } catch (err) {
-      return null;
+      console.log('Fetch invoice status error:', err);
+      return '';
     }
   };
 
@@ -84,7 +86,7 @@ export const StoreContextProvider = ({children}: {children: ReactNode}) => {
     queryKey: [`invoice-${currentInvoice?.id}`],
     queryFn: fetchInvoiceStatus,
     refetchInterval: 3000,
-    enabled: currentInvoice?.id && currentStore?.id && status === 'new',
+    enabled: !!currentInvoice?.id && !!currentStore?.id && status === 'new',
   });
 
   useEffect(() => {
@@ -104,12 +106,12 @@ export const StoreContextProvider = ({children}: {children: ReactNode}) => {
       setStores(data);
       setData(STORAGE_KEYS.STORES, data);
 
-      if (!currentStore.id) {
+      if (!currentStore?.id && data.length > 0) {
         setCurrentStore(data[0]);
         setData(STORAGE_KEYS.CURRENT_STORE, data[0]);
       }
     }
-  }, [currentStore.id, data]);
+  }, [currentStore?.id, data]);
 
   useEffect(() => {
     if (pollingData) {

@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {ScrollView} from 'react-native';
+import {ScrollView, View, Text} from 'react-native';
 import styles from './styles';
 import {sortTransactions} from './helpers';
 import {TransactionsContext} from '../../context/TransactionsContext';
@@ -14,6 +14,11 @@ const TransactionsContent = () => {
     <TransactionSkeleton />
   ) : (
     <ScrollView style={styles.container}>
+      {transactions && transactions?.length < 1 && !isLoading && (
+        <View style={styles.noTransactionsView}>
+          <Text style={styles.noTransactionsText}>No Transactions</Text>
+        </View>
+      )}
       {groupedAndSortedTransactions.map((transaction, index) => (
         <SingleTransactionGroup group={transaction} key={index} />
       ))}

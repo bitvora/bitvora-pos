@@ -126,7 +126,20 @@ const HomeScreen = () => {
   });
 
   const handleSubmit = async () => {
+    if (!currentStore?.id) {
+      showToast('error', 'You have no store!');
+      return;
+    }
     await mutateAsync();
+  };
+
+  const chargeButtonStyle = () => {
+    if (isLoading || !currentStore?.id) {
+      return styles.chargeButton;
+    } else if (value + secondValue > 0) {
+      return styles.activeChargeButton;
+    }
+    return styles.chargeButton;
   };
 
   return (
@@ -261,12 +274,8 @@ const HomeScreen = () => {
 
             <TouchableOpacity
               onPress={handleSubmit}
-              disabled={value <= 0 || isLoading}
-              style={
-                value + secondValue > 0
-                  ? styles.activeChargeButton
-                  : styles.chargeButton
-              }>
+              disabled={value <= 0 || isLoading || !currentStore?.id}
+              style={chargeButtonStyle()}>
               <Text style={styles.chargeText}>
                 {isLoading ? (
                   <Feather name="loader" color="#fff" size={25} />

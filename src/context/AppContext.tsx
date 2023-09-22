@@ -94,6 +94,7 @@ export const AppContextProvider = ({children}: {children: ReactNode}) => {
 
       return response?.data;
     } catch (err) {
+      console.log('Fetch BTC Price error: ', err);
       return null;
     }
   };
