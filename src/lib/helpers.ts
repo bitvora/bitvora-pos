@@ -34,6 +34,7 @@ export const showToast = (type: 'success' | 'error' | 'info', text: string) => {
     type,
     text1: text,
     topOffset: 50,
+    visibilityTime: 7000,
   });
 };
 
