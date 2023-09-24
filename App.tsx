@@ -109,7 +109,7 @@ function App(): JSX.Element {
           <NativeBaseProvider theme={customTheme}>
             <PaperProvider>
               <NavigationContainer theme={MyTheme}>
-                <Stack.Navigator initialRouteName={ROUTES.INDEX}>
+                <Stack.Navigator initialRouteName={ROUTES.INVOICE_CHECKOUT}>
                   <Stack.Screen
                     name={ROUTES.INDEX}
                     options={{headerShown: false}}

@@ -70,9 +70,11 @@ const styles = StyleSheet.create({
   activeTabText: {
     fontSize: 16,
     fontWeight: '700',
+    color: '#374151',
   },
   inactiveTabText: {
     fontSize: 16,
+    color: '#374151',
   },
   lightningContainer: {
     alignItems: 'center',
