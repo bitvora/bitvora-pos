@@ -55,7 +55,8 @@ const MainAppScreen = () => {
         activeColor="#FD7014"
         inactiveColor="#374151"
         initialRouteName={ROUTES.HOME}
-        barStyle={styles.tabBar}>
+        barStyle={styles.tabBar}
+      >
         <Tab.Screen
           name={ROUTES.HOME}
           component={HomeScreen}
@@ -109,7 +110,7 @@ function App(): JSX.Element {
           <NativeBaseProvider theme={customTheme}>
             <PaperProvider>
               <NavigationContainer theme={MyTheme}>
-                <Stack.Navigator initialRouteName={ROUTES.INVOICE_CHECKOUT}>
+                <Stack.Navigator initialRouteName={ROUTES.INDEX}>
                   <Stack.Screen
                     name={ROUTES.INDEX}
                     options={{headerShown: false}}
